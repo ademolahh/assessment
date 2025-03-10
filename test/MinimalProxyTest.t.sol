@@ -2,45 +2,65 @@
 pragma solidity 0.8.28;
 
 import { Test, console } from "forge-std/Test.sol";
-import { MinimalProxy } from "../src/MinimalProxy.sol";
-import { MinimalProxyAdmin } from "../src/MinimalProxyAdmin.sol";
-import { Storage, AlreadyInitialized } from "../src/Storage.sol";
+import { MinimalProxy } from "../src/task-one/MinimalProxy.sol";
+import { MinimalProxyAdmin } from "../src/task-one/MinimalProxyAdmin.sol";
+import { Storage, AlreadyInitialized } from "../src/task-one/Storage.sol";
+
+import { StorageV2 } from "../src/task-one/StorageV2.sol";
 
 contract MinimalProxyTest is Test {
-    MinimalProxy mp;
-    MinimalProxyAdmin mpa;
+    MinimalProxy proxy;
+    MinimalProxyAdmin admin;
 
-    Storage implSone;
+    Storage implementationV1;
 
     Storage sOne;
 
+    uint256 public constant INITIAL_NUMBER = 15;
+
     function setUp() public {
-        mpa = new MinimalProxyAdmin();
-        mp = new MinimalProxy(address(mpa));
+        admin = new MinimalProxyAdmin();
+        proxy = new MinimalProxy(address(admin));
 
-        implSone = new Storage();
-        mpa.upgrade(address(mp), address(implSone));
+        implementationV1 = new Storage();
 
-        sOne = Storage(address(mp));
+        admin.upgrade(address(proxy), address(implementationV1));
 
-        sOne.initialize();
+        (bool success,) =
+            address(proxy).call(abi.encodeWithSelector(implementationV1.initialize.selector, INITIAL_NUMBER));
+        if (!success) revert();
     }
 
     function testInitializer() public {
-        vm.expectRevert();
-        sOne.initialize();
+        (bool success,) =
+            address(proxy).call(abi.encodeWithSelector(implementationV1.initialize.selector, INITIAL_NUMBER));
 
-        assertEq(sOne.getNumber(), 1);
+        assertFalse(success);
     }
 
     function testIncrement() public {
-        sOne.increase();
+        (bool success,) = address(proxy).call(abi.encodeWithSelector(implementationV1.increase.selector));
+        assertTrue(success);
 
-        assertEq(sOne.getNumber(), 2);
+        (bool ok, bytes memory data) = address(proxy).call(abi.encodeWithSelector(implementationV1.getNumber.selector));
+        assertTrue(ok);
 
-        sOne.increase();
-        sOne.increase();
+        assertEq(abi.decode(data, (uint256)), INITIAL_NUMBER + 1);
+    }
 
-        assertEq(sOne.getNumber(), 4);
+    function testDecrement() public {
+        (bool ok,) = address(proxy).call(abi.encodeWithSelector(implementationV1.increase.selector));
+        assertTrue(ok);
+        StorageV2 implementationV2 = new StorageV2();
+        admin.upgrade(address(proxy), address(implementationV2));
+
+        (bool success,) = address(proxy).call(abi.encodeWithSelector(implementationV2.decrease.selector));
+        assertTrue(success);
+
+        (bool pass, bytes memory data) =
+            address(proxy).call(abi.encodeWithSelector(implementationV1.getNumber.selector));
+        assertTrue(pass);
+
+        assertEq(abi.decode(data, (uint256)), INITIAL_NUMBER);
     }
 }

@@ -1,8 +1,8 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.28;
 
-import { Test, console } from "forge-std/Test.sol";
-import { VestedStaking, IVestedStaking } from "../src/VestedStaking.sol";
+import { Test } from "forge-std/Test.sol";
+import { VestedStaking, IVestedStaking } from "../src/task-two/VestedStaking.sol";
 import { mERC20 } from "../src/mock/mERC20.sol";
 
 contract VestedStakingTest is Test {

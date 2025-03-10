@@ -4,8 +4,8 @@ pragma solidity 0.8.28;
 import { SafeTransferLib } from "solady/utils/SafeTransferLib.sol";
 import { FixedPointMathLib } from "solady/utils/FixedPointMathLib.sol";
 import { Ownable } from "solady/auth/Ownable.sol";
-import { IERC20 } from "./interfaces/IERC20.sol";
-import { IVestedStaking } from "./interfaces/IVestedStaking.sol";
+import { IERC20 } from "../interfaces/IERC20.sol";
+import { IVestedStaking } from "../interfaces/IVestedStaking.sol";
 import { RewardToken } from "./RewardToken.sol";
 
 /**

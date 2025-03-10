@@ -6,7 +6,7 @@ import { StdInvariant } from "forge-std/StdInvariant.sol";
 
 import { Handler } from "./Handler.t.sol";
 import { mERC20 } from "../../src/mock/mERC20.sol";
-import { VestedStaking } from "../../src/VestedStaking.sol";
+import { VestedStaking } from "../../src/task-two/VestedStaking.sol";
 
 contract Invariant is StdInvariant, Test {
     Handler handler;

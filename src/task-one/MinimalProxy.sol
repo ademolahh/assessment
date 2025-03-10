@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.28;
 
-import { IMinimalProxy } from "./interfaces/IMinimalProxy.sol";
+import { IMinimalProxy } from "../interfaces/IMinimalProxy.sol";
 
 contract MinimalProxy is IMinimalProxy {
     //  bytes32(uint256(keccak256("MinimalProxy.proxy.implementation")) - 1);

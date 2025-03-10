@@ -6,7 +6,7 @@ error AlreadyInitialized();
 contract Storage {
     uint256 private number;
 
-    bool initialized;
+    bool public initialized;
 
     modifier initializer() {
         if (initialized) revert AlreadyInitialized();
@@ -14,8 +14,8 @@ contract Storage {
         _;
     }
 
-    function initialize() external initializer {
-        number = 1;
+    function initialize(uint256 _initialNumber) external initializer {
+        number = _initialNumber;
     }
 
     function increase() external {
