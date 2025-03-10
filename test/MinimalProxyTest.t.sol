@@ -4,17 +4,15 @@ pragma solidity 0.8.28;
 import { Test, console } from "forge-std/Test.sol";
 import { MinimalProxy } from "../src/task-one/MinimalProxy.sol";
 import { MinimalProxyAdmin } from "../src/task-one/MinimalProxyAdmin.sol";
-import { Storage, AlreadyInitialized } from "../src/task-one/Storage.sol";
+import { SimpleStorage, AlreadyInitialized } from "../src/task-one/SimpleStorage.sol";
 
-import { StorageV2 } from "../src/task-one/StorageV2.sol";
+import { SimpleStorageV2 } from "../src/task-one/SimpleStorageV2.sol";
 
 contract MinimalProxyTest is Test {
     MinimalProxy proxy;
     MinimalProxyAdmin admin;
 
-    Storage implementationV1;
-
-    Storage sOne;
+    SimpleStorage implementationV1;
 
     uint256 public constant INITIAL_NUMBER = 15;
 
@@ -22,7 +20,7 @@ contract MinimalProxyTest is Test {
         admin = new MinimalProxyAdmin();
         proxy = new MinimalProxy(address(admin));
 
-        implementationV1 = new Storage();
+        implementationV1 = new SimpleStorage();
 
         admin.upgrade(address(proxy), address(implementationV1));
 
@@ -51,7 +49,7 @@ contract MinimalProxyTest is Test {
     function testDecrement() public {
         (bool ok,) = address(proxy).call(abi.encodeWithSelector(implementationV1.increase.selector));
         assertTrue(ok);
-        StorageV2 implementationV2 = new StorageV2();
+        SimpleStorageV2 implementationV2 = new SimpleStorageV2();
         admin.upgrade(address(proxy), address(implementationV2));
 
         (bool success,) = address(proxy).call(abi.encodeWithSelector(implementationV2.decrease.selector));

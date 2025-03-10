@@ -5,12 +5,18 @@ import { Script } from "forge-std/Script.sol";
 import { MinimalProxy } from "../src/task-one/MinimalProxy.sol";
 import { MinimalProxyAdmin } from "../src/task-one/MinimalProxyAdmin.sol";
 
-contract MinimalProxyScript is Script {
-    function run() public {
-        admin = new MinimalProxyAdmin();
-        proxy = new MinimalProxy(address(admin));
+import { SimpleStorage, AlreadyInitialized } from "../src/task-one/SimpleStorage.sol";
 
-        implementationV1 = new Storage();
+import { SimpleStorageV2 } from "../src/task-one/SimpleStorageV2.sol";
+
+contract MinimalProxyScript is Script {
+    uint256 public constant INITIAL_NUMBER = 10;
+
+    function run() public {
+        MinimalProxyAdmin admin = new MinimalProxyAdmin();
+        MinimalProxy proxy = new MinimalProxy(address(admin));
+
+        SimpleStorage implementationV1 = new SimpleStorage();
 
         admin.upgrade(address(proxy), address(implementationV1));
 

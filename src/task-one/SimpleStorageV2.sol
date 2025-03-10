@@ -3,10 +3,10 @@ pragma solidity 0.8.28;
 
 error AlreadyInitialized();
 
-contract Storage {
+contract SimpleStorageV2 {
     uint256 private number;
 
-    bool public initialized;
+    bool initialized;
 
     modifier initializer() {
         if (initialized) revert AlreadyInitialized();
@@ -20,6 +20,11 @@ contract Storage {
 
     function increase() external {
         number++;
+    }
+
+    function decrease() external {
+        if (number == 0) revert();
+        number--;
     }
 
     function getNumber() external view returns (uint256) {
