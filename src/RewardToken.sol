@@ -7,10 +7,11 @@ import { Ownable } from "solady/auth/Ownable.sol";
 /// @notice Thrown when the total supply exceeds the maximum allowable limit.
 error MaxSupplyExceeded();
 
+/// @notice Thrown when an unauthorized user attempts to perform a restricted action.
 error Unauthorized();
 
 contract RewardToken is ERC20, Ownable {
-    uint256 public constant MAX_SUPPLY = 10_000_000 ether;
+    uint256 public constant MAX_SUPPLY = 100_000_000_000 ether;
 
     constructor() {
         _initializeOwner(msg.sender);

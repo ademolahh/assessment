@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: MIT
 pragma solidity 0.8.28;
 
-contract GOC {
+contract GoC {
     // Identify gas inefficiencies in the function.
     // 1. Checks for the length for each loop
     // 2. Reads from memory(calldata better)
