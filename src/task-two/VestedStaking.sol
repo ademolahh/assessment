@@ -101,12 +101,12 @@ contract VestedStaking is IVestedStaking, Ownable {
             claimRewards(_token);
         }
 
-        if (s.balance == _amount) {
-            delete stake[msg.sender][tId];
-        } else {
-            s.balance -= _amount;
-            stake[msg.sender][tId] = s;
+        s.balance -= _amount;
+        if (s.balance == 0) {
+            s.unlockTimeStamp = 0;
+            s.lastRewardTimeStamp = 0;
         }
+        stake[msg.sender][tId] = s;
 
         _token.safeTransfer(msg.sender, _amount);
         emit Withdrawn(msg.sender, _token, _amount);
